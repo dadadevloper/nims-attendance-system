@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>NIMS Student Attendance System</title>
+<style>
+:root{--bg:#eaf2ff;--card:#fff;--tx:#14213d;--mut:#64748b;--bd:#e2e8f0;--pri:#2563eb;--g:#16a34a;--r:#dc2626;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f172a;--card:#1e293b;--tx:#e8eefc;--mut:#94a3b8;--bd:#334155;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0f172a;--card:#1e293b;--tx:#e8eefc;--mut:#94a3b8;--bd:#334155;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+button,input,select{font:inherit}
+.login{min-height:90vh;display:grid;place-items:center;padding:16px}
+.box{background:var(--card);border:1px solid var(--bd);border-radius:18px;padding:28px;width:100%;max-width:400px;box-shadow:0 10px 30px #2563eb22}
+.logo{width:54px;height:54px;border-radius:14px;background:linear-gradient(135deg,#06b6d4,#2563eb);color:#fff;display:grid;place-items:center;font-weight:800;margin:0 auto 8px}
+h1{font-size:20px;margin:0;text-align:center}.sub{color:var(--mut);text-align:center;font-size:13px;margin:2px 0 16px}
+.roles{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
+.roles button{padding:10px 4px;border:1px solid var(--bd);background:var(--bg);color:var(--tx);border-radius:10px;cursor:pointer}
+.roles button.on{background:var(--pri);color:#fff;border-color:var(--pri)}
+input,select{width:100%;padding:10px 12px;border:1px solid var(--bd);border-radius:10px;background:var(--card);color:var(--tx);margin-bottom:10px}
+.btn{background:var(--pri);color:#fff;border:0;border-radius:10px;padding:10px 16px;cursor:pointer;font-weight:600}
+.btn.g{background:var(--g)}.btn.r{background:var(--r)}.btn.o{background:#f59e0b}.btn.s{padding:5px 10px;font-size:13px}
+.hint{font-size:12px;color:var(--mut);margin-top:10px;line-height:1.6}.err{color:var(--r);font-size:13px;min-height:18px}
+.app{display:grid;grid-template-columns:210px 1fr;min-height:100vh}
+aside{background:var(--card);border-right:1px solid var(--bd);padding:16px 12px;display:flex;flex-direction:column;gap:4px}
+aside .brand{text-align:center;font-weight:800;margin-bottom:10px}aside .brand small{display:block;font-weight:500;color:var(--mut);font-size:11px}
+aside button{text-align:left;border:0;background:none;color:var(--tx);padding:10px 12px;border-radius:10px;cursor:pointer}
+aside button.on{background:var(--pri);color:#fff}aside .out{margin-top:auto;background:#fee2e2;color:#b91c1c}
+main{padding:18px;min-width:0}
+.top{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.top h2{margin:0;font-size:22px}.top p{margin:0;color:var(--mut)}
+.pill{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:8px 14px;font-weight:600}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:14px}
+.stat{border-radius:14px;padding:16px;color:#fff}.stat b{display:block;font-size:30px}
+.c1{background:#2563eb}.c2{background:#16a34a}.c3{background:#f59e0b}.c4{background:#7c3aed}.c5{background:#dc2626}
+.panel{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:16px;margin-bottom:14px;min-width:0}
+.panel h3{margin:0 0 10px;font-size:16px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+.tw{overflow-x:auto}table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{padding:8px 10px;text-align:left;border-bottom:1px solid var(--bd);white-space:nowrap}th{color:var(--mut);font-weight:600}
+.chip{padding:2px 10px;border-radius:99px;font-size:12px;font-weight:600}.P{background:#dcfce7;color:#166534}.A{background:#fee2e2;color:#991b1b}
+.donut{width:150px;height:150px;border-radius:50%;display:grid;place-items:center;margin:auto;background:radial-gradient(var(--card) 58%,transparent 59%),conic-gradient(var(--g) calc(var(--p)*1%),var(--r) 0)}
+.donut b{font-size:26px}.leg{display:flex;gap:16px;justify-content:center;margin-top:10px;font-size:13px;flex-wrap:wrap}
+.qa{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.row{display:flex;gap:8px;flex-wrap:wrap}.row input,.row select{flex:1;min-width:120px;margin:0}
+.mk{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--bd)}
+.tg button{border:1px solid var(--bd);background:var(--bg);color:var(--tx);padding:6px 14px;cursor:pointer}
+.tg button:first-child{border-radius:8px 0 0 8px}.tg button:last-child{border-radius:0 8px 8px 0}
+.tg .p{background:var(--g);color:#fff}.tg .a{background:var(--r);color:#fff}
+.bar{height:8px;background:#fee2e2;border-radius:9px;overflow:hidden;min-width:80px}.bar i{display:block;height:100%;background:var(--g)}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#16a34a;color:#fff;padding:10px 18px;border-radius:12px;z-index:9}
+.logo{clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);font-size:12px}
+.stat{display:flex;align-items:center;gap:12px;box-shadow:0 6px 16px #0002}.stat .ic{font-style:normal;font-size:24px;width:48px;height:48px;border-radius:12px;background:#ffffff33;display:grid;place-items:center;flex:none}
+.c1{background:linear-gradient(135deg,#2563eb,#38bdf8)}.c2{background:linear-gradient(135deg,#16a34a,#4ade80)}.c3{background:linear-gradient(135deg,#f97316,#fbbf24)}.c4{background:linear-gradient(135deg,#7c3aed,#a78bfa)}.c5{background:linear-gradient(135deg,#dc2626,#fb7185)}
+aside button{display:flex;gap:10px;align-items:center}aside button.on{box-shadow:0 4px 12px #2563eb55}
+.banner{display:flex;align-items:center;gap:14px;flex-wrap:wrap}.banner h3{font-size:20px;margin:0}.banner .wav{font-size:34px}.mut{color:var(--mut);font-size:13px}.quote{margin-left:auto;font-style:italic;font-family:Georgia,serif;color:var(--pri);font-size:17px}
+.tagwrap{text-align:center;margin-top:20px}.tag{display:inline-block;padding:8px 36px;border-radius:99px;color:#fff;font-weight:700;letter-spacing:1px}.tag.admin{background:#2563eb}.tag.teacher{background:#0d9488}.tag.student{background:#7c3aed}
+.dl{float:right}
+@media(max-width:720px){.app{grid-template-columns:1fr}aside{flex-direction:row;overflow-x:auto;border-right:0;border-bottom:1px solid var(--bd)}aside .brand{display:none}aside .out{margin:0 0 0 auto}aside button{white-space:nowrap}}
+</style></head><body><div id="root"></div>
+<script>
+const KEY='nims_db_v1',SKEY='nims_session';
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const iso=d=>new Date(d.getTime()-d.getTimezoneOffset()*6e4).toISOString().slice(0,10);
+const fmt=d=>d.split('-').reverse().join('-');
+const today=()=>iso(new Date());
+function seed(){
+  const names=['Mustafa','Yashwant','Sagar','Nandan','Jaswant','Pavan','Akhil'];
+  const students=names.map((n,i)=>({id:'s'+(i+1),name:n,cls:'BCA',user:n.toLowerCase(),pass:'1234'}));
+  const subjects=['Computer Application','Java Programming','Database Management','Web Technology','Python'].map(n=>({name:n,cls:'BCA'}));
+  const att=[];
+  for(let d=1;d<=6;d++){const dt=new Date();dt.setDate(dt.getDate()-d);if([0,6].includes(dt.getDay()))continue;
+    const marks={};students.forEach((s,i)=>marks[s.id]=((i*3+d*5)%9===0)?'A':'P');
+    att.push({date:iso(dt),cls:'BCA',subject:subjects[d%5].name,by:'Roop Sagar',marks});}
+  return{students,subjects,classes:['BCA'],teachers:[{id:'t1',name:'Roop Sagar',user:'teacher',pass:'teacher123'}],att,log:[{date:today(),text:'System ready',user:'Admin',role:'Admin'}]};
+}
+let DB,S=JSON.parse(sessionStorage.getItem(SKEY)||'null'),page='dash',role='student',M={},msub='',mdate=today(),err='';
+let SERVER=false,last='';
+function load(){if(SERVER&&DB)return;try{DB=JSON.parse(localStorage.getItem(KEY))}catch(e){}if(!DB){DB=seed();save()}}
+function save(){
+  if(SERVER){last=JSON.stringify(DB);fetch('/api/db',{method:'PUT',headers:{'Content-Type':'application/json'},body:last}).catch(()=>{});return}
+  try{localStorage.setItem(KEY,JSON.stringify(DB))}catch(e){}}
+async function initServer(){
+  try{const r=await fetch('/api/db');if(!r.ok)return;const t=await r.text();
+    if(t.trim()&&t.trim()!=='null'){DB=JSON.parse(t);last=t;SERVER=true}else{SERVER=true;DB=seed();save()}
+    render();
+    setInterval(async()=>{try{const t=await(await fetch('/api/db')).text();if(t&&t!==last){last=t;DB=JSON.parse(t);if(page!=='mark')render()}}catch(e){}},2000);
+  }catch(e){}}
+async function exportCSV(name,rows){
+  const csv=rows.map(r=>r.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(',')).join('\n');
+  if(SERVER||typeof claude==='undefined'){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download=name;a.click();return}
+  try{const d=await claude.use('downloads');if(!d)throw 0;await d.save({filename:name,data:csv});toast('CSV saved')}catch(e){if(!e||e.code!=='declined')toast('Download not available here')}
+}
+function log(text){DB.log.unshift({date:today(),text,user:S.name,role:S.role});DB.log=DB.log.slice(0,30)}
+function toast(t){const e=document.createElement('div');e.className='toast';e.textContent=t;document.body.appendChild(e);setTimeout(()=>e.remove(),1800)}
+function stats(sid){const st=DB.students.find(s=>s.id===sid);let p=0,a=0;DB.att.forEach(r=>{if(r.cls===st.cls&&r.marks[sid]){r.marks[sid]==='P'?p++:a++}});const t=p+a;return{p,a,t,pct:t?Math.round(p/t*100):0}}
+function overall(){let p=0,a=0;DB.students.forEach(s=>{const x=stats(s.id);p+=x.p;a+=x.a});const t=p+a;return{p,a,t,pct:t?Math.round(p/t*100):0}}
+const donut=(x,l)=>`<div class="donut" style="--p:${x.pct}"><b>${x.pct}%</b></div><div class="leg"><span style="color:var(--g)">● Present ${x.p}</span><span style="color:var(--r)">● Absent ${x.a}</span><span>● Total ${x.t}</span></div>`;
+const chip=v=>`<span class="chip ${v}">${v==='P'?'Present':'Absent'}</span>`;
+const IC={dash:'🏠',students:'🎓',teachers:'🧑‍🏫',att:'🗓️',subjects:'📘',classes:'🏫',reports:'📈',mark:'✏️'};
+const icon=l=>/Student/.test(l)?'👥':/Class/.test(l)?'🏫':/Subject/.test(l)?'📚':/User/.test(l)?'👤':/Present|Marked/.test(l)?'✅':/Absent/.test(l)?'❌':/Pending/.test(l)?'⏳':'📊';
+const card=(c,l,v)=>`<div class="stat ${c}"><i class="ic">${icon(l)}</i><div>${l}<b>${v}</b></div></div>`;
+const QUOTE={admin:'Education today for a better tomorrow',teacher:'Teaching today builds a better tomorrow',student:'Small Steps, Big Futures'};
+const banner=()=>`<div class="panel banner"><div class="wav">👋</div><div><h3>Welcome Back, ${esc(S.name)}!</h3><span class="mut">${S.role==='admin'?'Here’s what’s happening in your institute.':S.role==='teacher'?'Mark attendance and manage your classes.':'Here’s your attendance overview.'}</span></div><div class="quote">“${QUOTE[S.role]}”</div></div>`;
+
+function login(){
+  const u=$('#u').value.trim().toLowerCase(),p=$('#p').value;let f=null;
+  if(role==='admin'&&u==='admin'&&p==='admin123')f={role,id:'a',name:'Admin'};
+  if(role==='teacher'){const t=DB.teachers.find(t=>t.user===u&&t.pass===p);if(t)f={role,id:t.id,name:t.name}}
+  if(role==='student'){const s=DB.students.find(s=>s.user===u&&s.pass===p);if(s)f={role,id:s.id,name:s.name}}
+  if(!f){err='Wrong username or password';return render()}
+  S=f;err='';page='dash';sessionStorage.setItem(SKEY,JSON.stringify(S));render()
+}
+function logout(){S=null;sessionStorage.removeItem(SKEY);render()}
+function setRole(r){role=r;err='';render()}
+function go(p){page=p;render()}
+
+function loginView(){
+  const hints={admin:'admin / admin123',teacher:'teacher / teacher123',student:'mustafa / 1234 (same for yashwant, sagar, nandan, jaswant, pavan, akhil)'};
+  return`<div class="login"><div class="box"><div class="logo">NIMS</div><h1>Student Attendance System</h1><p class="sub">Nandi Institute of Management &amp; Science</p>
+  <div class="roles">${['student','teacher','admin'].map(r=>`<button class="${r===role?'on':''}" onclick="setRole('${r}')">${r[0].toUpperCase()+r.slice(1)}</button>`).join('')}</div>
+  <input id="u" placeholder="Username" autocomplete="off"><input id="p" type="password" placeholder="Password" onkeydown="if(event.key==='Enter')login()">
+  <div class="err">${err}</div><button class="btn" style="width:100%" onclick="login()">Login as ${role}</button><div class="hint">Demo login: ${hints[role]}</div></div></div>`;
+}
+
+const NAV={admin:[['dash','Dashboard'],['students','Students'],['teachers','Teachers'],['att','Attendance'],['subjects','Subjects'],['classes','Classes'],['reports','Reports']],
+ teacher:[['dash','Dashboard'],['mark','Mark Attendance'],['att','View Records'],['reports','Reports']],
+ student:[['dash','Dashboard'],['att','My Attendance'],['subjects','My Subjects']]};
+
+function sessionsTable(rows,showBy){
+  return`<div class="tw"><table><tr><th>Date</th><th>Class</th><th>Subject</th><th>Present</th><th>Absent</th>${showBy?'<th>Marked by</th>':''}</tr>${rows.map(r=>{const v=Object.values(r.marks);return`<tr><td>${fmt(r.date)}</td><td>${r.cls}</td><td>${esc(r.subject)}</td><td>${v.filter(x=>x==='P').length}</td><td>${v.filter(x=>x==='A').length}</td>${showBy?`<td>${esc(r.by)}</td>`:''}</tr>`}).join('')||'<tr><td colspan=6>No records yet</td></tr>'}</table></div>`;
+}
+const sorted=()=>[...DB.att].sort((a,b)=>b.date.localeCompare(a.date));
+
+function crud(kind){
+  const cfg={
+   students:{t:'Students',f:`<input id="f1" placeholder="Student name"><select id="f2">${DB.classes.map(c=>`<option>${c}</option>`).join('')}</select>`,cols:['Name','Class','Attendance'],row:s=>[esc(s.name),s.cls,stats(s.id).pct+'%'],list:DB.students},
+   teachers:{t:'Teachers',f:`<input id="f1" placeholder="Teacher name"><input id="f2" placeholder="Username"><input id="f3" placeholder="Password">`,cols:['Name','Username'],row:s=>[esc(s.name),esc(s.user)],list:DB.teachers},
+   subjects:{t:'Subjects',f:`<input id="f1" placeholder="Subject name"><select id="f2">${DB.classes.map(c=>`<option>${c}</option>`).join('')}</select>`,cols:['Subject','Class'],row:s=>[esc(s.name),s.cls],list:DB.subjects},
+   classes:{t:'Classes',f:`<input id="f1" placeholder="Class name (e.g. BBA)">`,cols:['Class','Students'],row:c=>[esc(c),DB.students.filter(s=>s.cls===c).length],list:DB.classes}}[kind];
+  return`<div class="panel"><h3>Add ${cfg.t}</h3><div class="row">${cfg.f}<button class="btn g" onclick="add('${kind}')">Add</button></div></div>
+  <div class="panel"><h3>All ${cfg.t} (${cfg.list.length})</h3><div class="tw"><table><tr>${cfg.cols.map(c=>`<th>${c}</th>`).join('')}<th></th></tr>${cfg.list.map((x,i)=>`<tr>${cfg.row(x).map(c=>`<td>${c}</td>`).join('')}<td><button class="btn r s" onclick="del('${kind}',${i})">Delete</button></td></tr>`).join('')}</table></div></div>`;
+}
+function add(k){
+  const a=($('#f1')||{}).value?.trim(),b=($('#f2')||{}).value?.trim(),c=($('#f3')||{}).value?.trim();
+  if(!a)return toast('Please fill the name');
+  if(k==='students')DB.students.push({id:'s'+Date.now(),name:a,cls:b,user:a.toLowerCase().replace(/\s/g,''),pass:'1234'});
+  if(k==='teachers'){if(!b||!c)return toast('Fill username and password');DB.teachers.push({id:'t'+Date.now(),name:a,user:b.toLowerCase(),pass:c})}
+  if(k==='subjects')DB.subjects.push({name:a,cls:b});
+  if(k==='classes'&&!DB.classes.includes(a))DB.classes.push(a);
+  log('Added '+k.slice(0,-1)+' '+a);save();render();toast('Added')
+}
+function del(k,i){if(!confirm('Delete this entry?'))return;const x=DB[k].splice(i,1)[0];log('Removed '+k.slice(0,-1)+' '+(x.name||x));save();render()}
+
+function mark(){
+  const subs=DB.subjects;if(!subs.length)return'<div class="panel">No subjects yet.</div>';
+  if(!msub)msub=subs[0].name;
+  const sub=subs.find(s=>s.name===msub)||subs[0],list=DB.students.filter(s=>s.cls===sub.cls);
+  const ex=DB.att.find(r=>r.date===mdate&&r.subject===sub.name&&r.cls===sub.cls);
+  list.forEach(s=>{if(!M[s.id])M[s.id]=ex&&ex.marks[s.id]||'P'});
+  return`<div class="panel"><h3>Mark Attendance</h3><div class="row"><select onchange="msub=this.value;M={};render()">${subs.map(s=>`<option ${s.name===msub?'selected':''}>${esc(s.name)}</option>`).join('')}</select><input type="date" value="${mdate}" max="${today()}" onchange="mdate=this.value;M={};render()"></div>${ex?'<p class="hint">Already marked for this date. Saving will update it.</p>':''}
+  ${list.map(s=>`<div class="mk"><span>${esc(s.name)}</span><span class="tg"><button class="${M[s.id]==='P'?'p':''}" onclick="M['${s.id}']='P';render()">Present</button><button class="${M[s.id]==='A'?'a':''}" onclick="M['${s.id}']='A';render()">Absent</button></span></div>`).join('')}
+  <p><button class="btn" onclick="saveAtt('${sub.cls}')">Save Attendance</button> <button class="btn o s" onclick="M={};DB.students.forEach(s=>M[s.id]='P');render()">All Present</button></p></div>`;
+}
+function saveAtt(cls){load();
+  const marks={};DB.students.filter(s=>s.cls===cls).forEach(s=>marks[s.id]=M[s.id]||'P');
+  DB.att=DB.att.filter(r=>!(r.date===mdate&&r.subject===msub&&r.cls===cls));
+  DB.att.push({date:mdate,cls,subject:msub,by:S.name,marks});
+  log('Attendance marked for '+cls+' ('+msub+')');save();M={};render();toast('Attendance saved')
+}
+
+const reportRows=()=>[['Student','Class','Present','Absent','Attendance %'],...DB.students.map(s=>{const x=stats(s.id);return[s.name,s.cls,x.p,x.a,x.pct]})];
+const recRows=()=>[['Date','Class','Subject','Present','Absent','Marked by'],...sorted().map(r=>{const v=Object.values(r.marks);return[r.date,r.cls,r.subject,v.filter(x=>x==='P').length,v.filter(x=>x==='A').length,r.by]})];
+const myRows=()=>{const st=DB.students.find(s=>s.id===S.id);return[['Date','Subject','Status'],...sorted().filter(r=>r.cls===st.cls&&r.marks[S.id]).map(r=>[r.date,r.subject,r.marks[S.id]==='P'?'Present':'Absent'])]};
+function reports(){
+  return`<div class="panel"><h3>Student Attendance Report <button class="btn g s dl" onclick="exportCSV('attendance-report.csv',reportRows())">⬇ Download CSV</button></h3><div class="tw"><table><tr><th>Student</th><th>Class</th><th>Present</th><th>Absent</th><th>%</th><th></th></tr>${DB.students.map(s=>{const x=stats(s.id);return`<tr><td>${esc(s.name)}</td><td>${s.cls}</td><td>${x.p}</td><td>${x.a}</td><td>${x.pct}%</td><td><div class="bar"><i style="width:${x.pct}%"></i></div></td></tr>`}).join('')}</table></div></div>`;
+}
+
+function view(){
+  const r=S.role;
+  if(page==='students'||page==='teachers'||page==='subjects'&&r==='admin'||page==='classes')return crud(page);
+  if(page==='mark')return mark();
+  if(page==='reports')return reports();
+  if(page==='subjects'){const me=DB.students.find(s=>s.id===S.id);return`<div class="panel"><h3>My Subjects</h3><div class="tw"><table><tr><th>Subject</th><th>Present</th><th>Absent</th></tr>${DB.subjects.filter(s=>s.cls===me.cls).map(s=>{let p=0,a=0;DB.att.forEach(x=>{if(x.subject===s.name&&x.marks[me.id])x.marks[me.id]==='P'?p++:a++});return`<tr><td>${esc(s.name)}</td><td>${p}</td><td>${a}</td></tr>`}).join('')}</table></div></div>`}
+  if(page==='att'){
+    if(r==='student')return`<div class="panel"><h3>My Attendance <button class="btn g s dl" onclick="exportCSV('my-attendance.csv',myRows())">⬇ Download CSV</button></h3>${stuTable(S.id,99)}</div>`;
+    return`<div class="panel"><h3>Attendance Records <button class="btn g s dl" onclick="exportCSV('attendance-records.csv',recRows())">⬇ Download CSV</button></h3>${sessionsTable(sorted(),true)}</div>`;
+  }
+  if(r==='admin'){const o=overall();return`<div class="cards">${card('c1','Total Students',DB.students.length)}${card('c2','Total Classes',DB.classes.length)}${card('c3','Total Subjects',DB.subjects.length)}${card('c4','Total Users',DB.students.length+DB.teachers.length+1)}</div>
+  <div class="grid"><div class="panel"><h3>Recent Activities</h3><div class="tw"><table><tr><th>Date</th><th>Activity</th><th>User</th><th>Role</th></tr>${DB.log.slice(0,6).map(l=>`<tr><td>${fmt(l.date)}</td><td>${esc(l.text)}</td><td>${esc(l.user)}</td><td>${l.role}</td></tr>`).join('')}</table></div></div>
+  <div class="panel"><h3>Quick Actions</h3><div class="qa"><button class="btn" onclick="go('students')">Add Student</button><button class="btn g" onclick="go('teachers')">Add Teacher</button><button class="btn o" onclick="go('classes')">Add Class</button><button class="btn" style="background:#7c3aed" onclick="go('reports')">Generate Report</button></div><p class="hint"><a href="#" onclick="if(confirm('Reset all data to demo?')){DB=seed();save();render()}return false">Reset demo data</a></p></div>
+  <div class="panel"><h3>Attendance Overview</h3>${donut(o)}</div></div>`}
+  if(r==='teacher'){const done=DB.att.filter(x=>x.date===today()).map(x=>x.subject);const pend=DB.subjects.filter(s=>!done.includes(s.name)).length;
+    return`<div class="cards">${card('c4','My Classes',DB.classes.length)}${card('c2','My Subjects',DB.subjects.length)}${card('c1','Marked Today',done.length)}${card('c3','Pending Today',pend)}</div>
+    <div class="grid"><div class="panel"><h3>Today’s Class</h3><p>Class: BCA<br>Date: ${fmt(today())}</p><button class="btn" onclick="go('mark')">Mark Attendance</button></div><div class="panel"><h3>Overall Attendance</h3>${donut(overall())}</div></div>
+    <div class="panel"><h3>My Recent Classes</h3>${sessionsTable(sorted().slice(0,5),false)}</div>`}
+  const x=stats(S.id);
+  return`<div class="cards">${card('c2','Total Classes',x.t)}${card('c1','Present',x.p)}${card('c5','Absent',x.a)}${card('c4','Attendance',x.pct+'%')}</div>
+  <div class="grid"><div class="panel"><h3>My Attendance (Recent)</h3>${stuTable(S.id,6)}</div><div class="panel"><h3>Attendance Progress</h3>${donut(x)}</div></div>`;
+}
+function stuTable(id,n){
+  const st=DB.students.find(s=>s.id===id);
+  const rows=sorted().filter(r=>r.cls===st.cls&&r.marks[id]).slice(0,n);
+  return`<div class="tw"><table><tr><th>Date</th><th>Subject</th><th>Status</th></tr>${rows.map(r=>`<tr><td>${fmt(r.date)}</td><td>${esc(r.subject)}</td><td>${chip(r.marks[id])}</td></tr>`).join('')||'<tr><td colspan=3>No records yet</td></tr>'}</table></div>`;
+}
+
+function render(){
+  load();
+  if(!S){$('#root').innerHTML=loginView();return}
+  const nav=NAV[S.role];if(!nav.find(n=>n[0]===page))page='dash';
+  const title=nav.find(n=>n[0]===page)[1];
+  $('#root').innerHTML=`<div class="app"><aside><div class="brand"><div class="logo">N</div>NIMS<small>Nandi Institute of Management &amp; Science</small></div>${nav.map(n=>`<button class="${n[0]===page?'on':''}" onclick="go('${n[0]}')">${IC[n[0]]} ${n[1]}</button>`).join('')}<button class="out" onclick="logout()">Logout</button></aside>
+  <main><div class="top"><div><h2>${page==='dash'?'Student Attendance System':title}</h2><p>Protective | Proactive | Productive</p></div><div class="pill">${fmt(today())} · <span id="clk"></span></div></div>${page==='dash'?banner():''}${view()}<div class="tagwrap"><span class="tag ${S.role}">${S.role.toUpperCase()} INTERFACE</span></div></main></div>`;
+  tick();
+}
+function tick(){const c=$('#clk');if(c)c.textContent=new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit',second:'2-digit'})}
+setInterval(tick,1000);
+window.addEventListener('storage',e=>{if(e.key===KEY&&page!=='mark')render()});
+render();initServer();
+</script></body></html>
